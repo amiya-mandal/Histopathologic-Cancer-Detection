@@ -26,3 +26,19 @@ class DataTrainLoader(Dataset):
 
     def __len__(self):
         return self.train_labels.id.count()
+    
+class DataTestLoader(Dataset):
+
+    def __init__(self, path, transform):
+        files_path = os.getcwd() +'/'+ path + '/'
+        self.test_images = files_path + "test/"
+        self.onlyfiles = [f[:-4] for f in os.listdir(self.test_images)]
+        self.transform = transform
+    
+    def __getitem__(self, index):
+        image = Image.open(self.test_images+self.onlyfiles[index]+'.tif')
+        image = self.transform(image)
+        return image, self.onlyfiles[index]
+
+    def __len__(self):
+        return len(self.onlyfiles)
